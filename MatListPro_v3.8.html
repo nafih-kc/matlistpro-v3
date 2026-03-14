@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#1565C0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="MatList Pro"/>
+<title>MatList Pro</title>
+<link rel="manifest" href="manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --blue:#1565C0;--blue2:#1976D2;--blue3:#42A5F5;--blue-light:#E3F2FD;--blue-mid:#BBDEFB;
+  --white:#fff;--bg:#F4F7FF;--bg2:#EEF3FF;
+  --text:#0D1B3E;--text2:#3A4A6B;--muted:#8A96B0;
+  --border:#D4DCF0;--border2:#B8CCE8;
+  --green:#1B7F4F;--green2:#2E7D32;--green-light:#E8F5E9;--green-mid:#A5D6A7;
+  --red:#C62828;--red-light:#FFEBEE;
+  --orange:#E65100;--orange-light:#FFF3E0;
+  --shadow:0 2px 12px rgba(21,101,192,0.09);
+  --shadow2:0 6px 28px rgba(21,101,192,0.16);
+  --radius:14px;--radius2:10px;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overscroll-behavior:none;}
+
+/* ── HEADER ── */
+.header{background:linear-gradient(135deg,var(--blue) 0%,var(--blue2) 100%);padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(21,101,192,0.28);position:sticky;top:0;z-index:200;}
+.hlogo{width:36px;height:36px;background:rgba(255,255,255,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.htitle{font-size:17px;font-weight:900;color:#fff;}
+.hsub{font-size:10px;color:rgba(255,255,255,0.72);margin-top:1px;}
+.hbadge{margin-left:auto;font-size:11px;background:rgba(255,255,255,0.18);border-radius:20px;padding:4px 11px;color:#fff;font-weight:700;}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1.5px solid var(--border);display:flex;z-index:200;box-shadow:0 -3px 16px rgba(21,101,192,0.07);}
+.nbtn{flex:1;padding:9px 0 7px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:700;cursor:pointer;position:relative;transition:color 0.18s;}
+.nbtn.active{color:var(--blue);}
+.nbtn.active::after{content:'';position:absolute;bottom:0;left:22%;right:22%;height:3px;background:var(--blue);border-radius:3px 3px 0 0;}
+.nicon{font-size:20px;}
+.nbadge{position:absolute;top:6px;right:18%;background:var(--red);color:#fff;font-size:9px;font-weight:900;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;}
+
+/* ── LAYOUT ── */
+.content{padding:14px 14px 86px;}
+.card{background:var(--white);border-radius:var(--radius);padding:15px;border:1px solid var(--border);margin-bottom:12px;box-shadow:var(--shadow);}
+.ctitle{font-size:11px;font-weight:800;color:var(--blue);margin-bottom:11px;text-transform:uppercase;letter-spacing:0.8px;}
+.row{display:flex;align-items:center;gap:10px;}
+.col{display:flex;flex-direction:column;gap:5px;}
+
+/* ── BUTTONS ── */
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;border-radius:var(--radius2);transition:opacity 0.15s;}
+.btn:active{opacity:0.85;}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 4px 14px rgba(21,101,192,0.32);}
+.btn-outline{background:var(--white);color:var(--text2);border:2px solid var(--border2)!important;}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 3px 10px rgba(27,127,79,0.28);}
+.btn-red{background:var(--red-light);color:var(--red);}
+.btn-ghost{background:var(--bg2);color:var(--blue);border:1.5px solid var(--blue-mid)!important;}
+.btn-sm{font-size:12px;padding:8px 14px;}
+.btn-md{font-size:14px;padding:11px 18px;}
+.btn-lg{font-size:15px;padding:13px 20px;width:100%;}
+.btn-xl{font-size:16px;padding:15px 20px;width:100%;}
+.btn-icon{width:34px;height:34px;border-radius:9px;font-size:15px;flex-shrink:0;}
+
+/* ── INPUTS ── */
+.inp{width:100%;padding:11px 13px;border-radius:var(--radius2);border:1.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;outline:none;transition:border 0.2s;}
+.inp:focus{border-color:var(--blue);}
+.inp::placeholder{color:var(--muted);font-size:14px;}
+.sel{width:100%;padding:11px 13px;border-radius:var(--radius2);border:1.5px solid var(--border2);background:var(--white);color:var(--text);font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;outline:none;}
+.flabel{font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:0.4px;}
+.fgroup{display:flex;flex-direction:column;gap:4px;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.fgrid .full{grid-column:1/-1;}
+
+/* ── PROJECT CARDS ── */
+.pcard{background:var(--white);border-radius:var(--radius);padding:16px;border:2px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;gap:13px;cursor:pointer;margin-bottom:10px;transition:border-color 0.2s,background 0.2s;}
+.pcard:active{transform:scale(0.985);}
+.pcard.done{background:var(--green-light);border-color:var(--green-mid);}
+.pemoji{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.pname{font-weight:800;font-size:15px;}
+.pmeta{font-size:12px;color:var(--muted);margin-top:3px;}
+.pchip{font-size:10px;border-radius:20px;padding:3px 10px;font-weight:800;color:#fff;white-space:nowrap;}
+.add-proj{background:var(--white);border:2px dashed var(--blue-mid);border-radius:var(--radius);padding:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:var(--blue);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;width:100%;transition:background 0.15s;}
+.add-proj:active{background:var(--blue-light);}
+
+/* ── PROJECT COLORS ── */
+.pc-blue{background:#E3F2FD;}.pc-green{background:#E8F5E9;}.pc-orange{background:#FFF3E0;}.pc-red{background:#FFEBEE;}.pc-purple{background:#F3E5F5;}.pc-teal{background:#E0F2F1;}
+.pcc-blue{background:var(--blue);}.pcc-green{background:var(--green);}.pcc-orange{background:#E65100;}.pcc-red{background:var(--red);}.pcc-purple{background:#6A1B9A;}.pcc-teal{background:#00695C;}
+
+/* ── LIST ITEMS ── */
+.litem{background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp 0.22s ease;}
+.litem.purchased{opacity:0.6;border-color:var(--green-mid);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ltop{display:flex;align-items:center;gap:11px;padding:12px 13px;}
+.limg{width:50px;height:50px;border-radius:11px;background:var(--blue-light);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.limg svg{width:34px;height:34px;}
+.lname{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lbrand{font-size:12px;color:var(--muted);margin-top:2px;}
+.lprice{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:11px;font-weight:800;border-radius:5px;padding:2px 7px;margin-left:5px;}
+.lqty{display:flex;align-items:center;background:var(--bg2);border-radius:9px;border:1.5px solid var(--border);overflow:hidden;flex-shrink:0;}
+.qbtn{width:32px;height:32px;border:none;background:none;cursor:pointer;font-size:19px;color:var(--blue);font-weight:900;display:flex;align-items:center;justify-content:center;}
+.qbtn:active{background:var(--blue-mid);}
+.qnum{min-width:30px;text-align:center;font-weight:800;font-size:14px;}
+.lbot{padding:0 13px 11px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.chip{font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:2px 9px;font-weight:700;color:var(--text2);}
+.chip.g{background:var(--green-light);color:var(--green);border-color:var(--green-mid);}
+.chip.o{background:var(--orange-light);color:var(--orange);border-color:#FFCC80;}
+.chip.purchased-chip{background:var(--green);color:#fff;border:none;}
+.lnotes{font-size:11px;color:var(--muted);font-style:italic;}
+.lactions{display:flex;gap:6px;margin-left:auto;flex-shrink:0;}
+
+/* ── SEARCH ── */
+.swrap{position:relative;margin-bottom:12px;}
+.sinput{width:100%;padding:12px 38px 12px 42px;border-radius:var(--radius2);border:2px solid var(--border2);background:var(--white);color:var(--text);font-size:16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;outline:none;transition:border 0.2s;box-shadow:var(--shadow);}
+.sinput:focus{border-color:var(--blue);}
+.sinput::placeholder{color:var(--muted);}
+.sicon{position:absolute;left:13px;top:50%;transform:translateY(-50%);pointer-events:none;}
+.sclear{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;line-height:1;}
+
+/* ── SUGGESTIONS ── */
+.sitem{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:11px;cursor:pointer;margin-bottom:5px;background:var(--white);border:1.5px solid var(--border);box-shadow:var(--shadow);transition:transform 0.12s;}
+.sitem:active{transform:scale(0.98);}
+.sitem.pop{border-color:var(--blue);background:var(--blue-light);}
+.sitem.freq{border-color:#6A1B9A;background:#F3E5F5;}
+.simg{width:42px;height:42px;border-radius:10px;background:var(--bg2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.simg svg{width:30px;height:30px;}
+.sitem.pop .simg{background:#DDEEFF;}
+.sbrand{font-weight:800;font-size:14px;}
+.scat{font-size:12px;color:var(--muted);margin-top:1px;}
+.sprice{font-size:12px;font-weight:800;color:var(--blue);text-align:right;}
+.sbadge{font-size:9px;border-radius:4px;padding:2px 6px;font-weight:800;color:#fff;display:inline-block;margin-top:3px;}
+
+/* ── ADD FORM ── */
+.aform{background:var(--white);border-radius:var(--radius);padding:16px;border:2px solid var(--blue);box-shadow:var(--shadow2);margin-top:12px;}
+.aform-hdr{display:flex;align-items:center;gap:12px;margin-bottom:15px;}
+.aform-img{width:54px;height:54px;border-radius:12px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.aform-img svg{width:38px;height:38px;}
+.aform-brand{font-weight:900;font-size:16px;}
+.aform-item{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── QTY PICKER (add form) ── */
+.qty-picker{display:flex;align-items:center;gap:0;background:var(--bg2);border-radius:10px;border:1.5px solid var(--border2);overflow:hidden;width:100%;}
+.qty-picker .qbtn{flex:1;height:44px;font-size:22px;}
+.qty-picker .qnum{flex:2;font-size:18px;font-weight:900;text-align:center;}
+
+/* ── CUSTOM ENTRY ── */
+.cbox{background:var(--blue-light);border:2px dashed var(--blue-mid);border-radius:var(--radius2);padding:13px;margin-bottom:10px;}
+.cbox-title{font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:9px;}
+.crow{display:flex;gap:8px;margin-bottom:8px;}
+.cinp{flex:1;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border2);background:var(--white);color:var(--text);font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;outline:none;}
+.cinp:focus{border-color:var(--blue);}
+.saved-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:var(--white);border:1.5px solid var(--blue-mid);font-size:12px;font-weight:700;color:var(--blue);cursor:pointer;margin:3px;}
+.saved-chip:active{background:var(--blue-light);}
+
+/* ── SUMMARY ── */
+.sumbox{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--radius2);padding:14px;margin-bottom:12px;}
+.sumgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;}
+.sumitem{text-align:center;}
+.sumnum{font-size:20px;font-weight:900;color:var(--blue);}
+.sumlabel{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-top:1px;}
+
+/* ── COST TOTAL ── */
+.costtotal{background:linear-gradient(135deg,var(--blue),var(--blue2));border-radius:var(--radius2);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.ctlabel{font-size:12px;color:rgba(255,255,255,0.8);font-weight:700;}
+.ctvalue{font-size:22px;font-weight:900;color:#fff;}
+.ctnote{font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;}
+
+/* ── QUICK CHIPS ── */
+.qchips{display:flex;flex-wrap:wrap;gap:7px;}
+.qchip{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border2);background:var(--white);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:var(--shadow);}
+.qchip svg{width:18px;height:18px;}
+.qchip:active{background:var(--blue-light);border-color:var(--blue);color:var(--blue);}
+.freq-section{margin-bottom:10px;}
+.freq-title{font-size:11px;font-weight:800;color:#6A1B9A;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
+
+/* ── FILTER TABS ── */
+.ftabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:12px;}
+.ftabs::-webkit-scrollbar{display:none;}
+.ftab{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--white);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.ftab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 20px;}
+.empty-icon{font-size:52px;margin-bottom:12px;}
+.empty-title{font-size:16px;font-weight:800;color:var(--text2);}
+.empty-sub{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.6;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:11px 20px;border-radius:30px;font-weight:800;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,0.18);z-index:999;white-space:nowrap;animation:tIn 0.28s ease;pointer-events:none;}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── MODAL / BOTTOM SHEET ── */
+.overlay{position:fixed;inset:0;background:rgba(13,27,62,0.55);z-index:300;display:flex;align-items:flex-end;backdrop-filter:blur(3px);}
+.sheet{background:var(--white);border-radius:22px 22px 0 0;padding:22px 18px;width:100%;border-top:3px solid var(--blue);animation:shUp 0.28s ease;max-height:85vh;overflow-y:auto;}
+@keyframes shUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-title{font-size:16px;font-weight:900;margin-bottom:14px;}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
+.minp{width:100%;padding:12px 14px;border-radius:11px;border:2px solid var(--border2);background:var(--bg);color:var(--text);font-size:15px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;outline:none;margin-bottom:12px;}
+.minp:focus{border-color:var(--blue);}
+
+/* ── EXPORT SHEET ── */
+.exp-opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius2);border:1.5px solid var(--border);margin-bottom:9px;cursor:pointer;background:var(--white);transition:all 0.15s;}
+.exp-opt:active{background:var(--blue-light);border-color:var(--blue);}
+.exp-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.exp-label{font-weight:800;font-size:15px;}
+.exp-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── COLOR PICKER ── */
+.cpicker{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.copt{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform 0.15s;}
+.copt.selected{border-color:var(--text);transform:scale(1.15);}
+
+/* ── BACK BTN ── */
+.backbtn{display:flex;align-items:center;gap:6px;background:var(--blue-light);border:none;color:var(--blue);border-radius:9px;padding:8px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;cursor:pointer;margin-bottom:13px;}
+
+/* ── DONE BANNER ── */
+.donebanner{background:linear-gradient(135deg,var(--green),var(--green2));border-radius:var(--radius);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px rgba(27,127,79,0.25);}
+.dbtext{flex:1;color:#fff;}
+.dbtitle{font-weight:900;font-size:15px;}
+.dbsub{font-size:11px;opacity:0.8;margin-top:2px;}
+.dbbtn{padding:9px 16px;border-radius:10px;border:none;background:rgba(255,255,255,0.22);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:12px;cursor:pointer;flex-shrink:0;}
+
+/* ── ABOUT ── */
+.github-card{background:linear-gradient(135deg,#0D1117,#161B22);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.gha{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#42A5F5);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ghname{font-size:16px;font-weight:900;color:#fff;}
+.ghsub{font-size:12px;color:#8B949E;margin-top:3px;}
+.ghbtn{margin-top:8px;padding:8px 16px;border-radius:9px;border:none;background:#238636;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:12px;cursor:pointer;text-decoration:none;display:inline-block;}
+.afeat{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text2);}
+.afeat:last-child{border-bottom:none;}
+.vbadge{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:11px;font-weight:800;border-radius:20px;padding:3px 12px;margin-top:5px;}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:74px;right:16px;width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--blue2));border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 5px 18px rgba(21,101,192,0.42);display:flex;align-items:center;justify-content:center;z-index:150;}
+.fab:active{transform:scale(0.92);}
+
+/* ── SETTINGS ── */
+.setsec{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin:14px 0 8px;}
+.setrow{background:var(--white);border-radius:var(--radius2);border:1px solid var(--border);padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);}
+.seticon{font-size:20px;width:36px;text-align:center;}
+.setlabel{font-weight:700;font-size:14px;}
+.setsub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── INSTALL BANNER ── */
+.ibanner{background:linear-gradient(135deg,var(--blue-light),#E8EAF6);border:1.5px solid var(--blue-mid);border-radius:var(--radius2);padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.ibtext{flex:1;font-size:13px;font-weight:700;}
+.ibsub{font-size:11px;color:var(--muted);margin-top:1px;}
+.ibbtn{padding:8px 12px;border-radius:9px;border:none;background:var(--blue);color:#fff;font-weight:800;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hlogo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div><div class="htitle">MatList Pro</div><div class="hsub">Smart Materials List • India</div></div>
+  <div class="hbadge">v3.8 ✦</div>
+</div>
+
+<div id="app"></div>
+
+<div class="bnav">
+  <button class="nbtn active" id="nb-home" onclick="go('home')"><span class="nicon">🏠</span>Projects<span class="nbadge" id="pendingBadge" style="display:none"></span></button>
+  <button class="nbtn" id="nb-search" onclick="go('search')"><span class="nicon">🔍</span>Search</button>
+  <button class="nbtn" id="nb-settings" onclick="go('settings')"><span class="nicon">⚙️</span>Settings</button>
+  <button class="nbtn" id="nb-about" onclick="go('about')"><span class="nicon">ℹ️</span>About</button>
+</div>
+
+<div class="toast" id="toast" style="display:none"></div>
+<div class="overlay" id="overlay" style="display:none" onclick="closeSheet()"><div class="sheet" id="sheet" onclick="event.stopPropagation()"></div></div>
+
+<script>
+// ════════════════════════════════════════
+// SVG ICONS
+// ════════════════════════════════════════
+const ICONS={
+  bulb:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="20" r="12" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/><path d="M20 32h8M21 35h6M22 38h4" stroke="#F9A825" stroke-width="2" stroke-linecap="round"/><path d="M19 26c-3-2-5-5-5-9a10 10 0 0120 0c0 4-2 7-5 9" fill="#FFE082" stroke="#F9A825" stroke-width="1.5"/><path d="M24 14v3M17 17l2 2M31 17l-2 2" stroke="#F9A825" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  wire:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="20" width="40" height="8" rx="4" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/><rect x="4" y="22" width="40" height="2" rx="1" fill="#E53935"/><rect x="4" y="25" width="40" height="2" rx="1" fill="#1B5E20"/><circle cx="8" cy="24" r="4" fill="#1565C0"/><circle cx="40" cy="24" r="4" fill="#1565C0"/></svg>`,
+  pipe:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="16" width="40" height="16" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="4" y="20" width="40" height="8" rx="4" fill="#BBDEFB"/><ellipse cx="44" cy="24" rx="4" ry="8" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/><ellipse cx="4" cy="24" rx="4" ry="8" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/></svg>`,
+  "pipe l":`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="20" width="22" height="12" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="20" y="6" width="12" height="22" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="20" y="20" width="8" height="12" fill="#BBDEFB"/></svg>`,
+  switch:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="6" fill="#F5F8FF" stroke="#1565C0" stroke-width="2"/><rect x="12" y="14" width="24" height="20" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/><rect x="18" y="20" width="12" height="8" rx="3" fill="#1565C0"/><circle cx="15" cy="38" r="2" fill="#1565C0"/><circle cx="33" cy="38" r="2" fill="#1565C0"/></svg>`,
+  mcb:`<svg viewBox="0 0 48 48" fill="none"><rect x="10" y="4" width="28" height="40" rx="5" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="14" y="8" width="20" height="10" rx="3" fill="#1565C0"/><rect x="20" y="22" width="8" height="14" rx="4" fill="#F5F8FF" stroke="#1565C0" stroke-width="1.5"/><rect x="21" y="25" width="6" height="6" rx="3" fill="#1565C0"/><circle cx="18" cy="38" r="2" fill="#1565C0"/><circle cx="30" cy="38" r="2" fill="#1565C0"/></svg>`,
+  fan:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="4" fill="#1565C0"/><ellipse cx="24" cy="12" rx="5" ry="9" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5" transform="rotate(-20 24 12)"/><ellipse cx="36" cy="32" rx="5" ry="9" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5" transform="rotate(100 36 32)"/><ellipse cx="12" cy="32" rx="5" ry="9" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5" transform="rotate(220 12 32)"/><circle cx="24" cy="24" r="3" fill="#1565C0" stroke="#fff" stroke-width="1.5"/></svg>`,
+  socket:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="36" height="36" rx="8" fill="#F5F8FF" stroke="#1565C0" stroke-width="2"/><circle cx="24" cy="22" r="10" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/><rect x="21" y="16" width="3" height="7" rx="1.5" fill="#1565C0"/><rect x="27" y="16" width="3" height="7" rx="1.5" fill="#1565C0"/><circle cx="24" cy="34" r="2" fill="#1565C0"/></svg>`,
+  tape:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/><circle cx="24" cy="24" r="9" fill="#F5F8FF" stroke="#F9A825" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="#E3F2FD"/><path d="M24 6 A18 18 0 0 1 42 24" stroke="#F9A825" stroke-width="6" stroke-linecap="round" fill="none"/></svg>`,
+  conduit:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="18" width="40" height="12" rx="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="4" y="21" width="40" height="6" rx="3" fill="#BBDEFB"/><ellipse cx="44" cy="24" rx="5" ry="6" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/><ellipse cx="4" cy="24" rx="5" ry="6" fill="#90CAF9" stroke="#1565C0" stroke-width="2"/></svg>`,
+  cement:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="20" width="36" height="24" rx="3" fill="#ECEFF1" stroke="#607D8B" stroke-width="2"/><path d="M6 26h36" stroke="#607D8B" stroke-width="1.5"/><path d="M10 4l-4 16h36L38 4z" fill="#CFD8DC" stroke="#607D8B" stroke-width="2"/><text x="24" y="36" text-anchor="middle" font-size="8" font-weight="bold" fill="#607D8B" font-family="sans-serif">50KG</text></svg>`,
+  paint:`<svg viewBox="0 0 48 48" fill="none"><rect x="10" y="16" width="28" height="28" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="14" y="20" width="20" height="16" rx="2" fill="#42A5F5"/><path d="M18 8h12v8H18z" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/><path d="M22 4h4v4h-4z" fill="#1565C0"/></svg>`,
+  tile:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="18" height="18" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="26" y="4" width="18" height="18" rx="2" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/><rect x="4" y="26" width="18" height="18" rx="2" fill="#BBDEFB" stroke="#1565C0" stroke-width="2"/><rect x="26" y="26" width="18" height="18" rx="2" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/></svg>`,
+  geyser:`<svg viewBox="0 0 48 48" fill="none"><rect x="12" y="8" width="24" height="34" rx="12" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><path d="M20 4h8v4h-8z" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/><circle cx="24" cy="26" r="8" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/><path d="M22 22c0 0 4 2 4 6" stroke="#1565C0" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  light:`<svg viewBox="0 0 48 48" fill="none"><path d="M8 12h32l-4 20H12L8 12z" fill="#FFF9C4" stroke="#F9A825" stroke-width="2"/><path d="M12 32h24v4H12z" fill="#ECEFF1" stroke="#607D8B" stroke-width="1.5"/><path d="M18 36h12v4H18z" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/></svg>`,
+  "db box":`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/><rect x="10" y="12" width="10" height="6" rx="2" fill="#1565C0"/><rect x="10" y="22" width="10" height="6" rx="2" fill="#1565C0"/><rect x="10" y="32" width="10" height="4" rx="2" fill="#90CAF9"/><rect x="24" y="12" width="14" height="24" rx="3" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/><circle cx="31" cy="24" r="4" fill="#1565C0"/></svg>`,
+  "tmt bar":`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="20" width="40" height="8" rx="2" fill="#CFD8DC" stroke="#607D8B" stroke-width="2"/><path d="M8 20v8M14 20v8M20 20v8M26 20v8M32 20v8M38 20v8" stroke="#607D8B" stroke-width="1.5"/></svg>`,
+  plywood:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="10" width="40" height="28" rx="3" fill="#EFEBE9" stroke="#795548" stroke-width="2"/><path d="M4 18h40M4 26h40" stroke="#795548" stroke-width="1.5"/><path d="M12 10v28M24 10v28M36 10v28" stroke="#BCAAA4" stroke-width="1"/></svg>`,
+  marble:`<svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="40" height="40" rx="4" fill="#FAFAFA" stroke="#9E9E9E" stroke-width="2"/><path d="M10 14 Q20 8 30 20 Q38 30 42 24" stroke="#BDBDBD" stroke-width="1.5" fill="none"/><path d="M6 28 Q14 22 22 32 Q28 40 36 36" stroke="#BDBDBD" stroke-width="1" fill="none"/></svg>`,
+  screw:`<svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="12" rx="2" fill="#CFD8DC" stroke="#607D8B" stroke-width="1.5"/><path d="M18 4h12" stroke="#607D8B" stroke-width="2" stroke-linecap="round"/><rect x="22" y="16" width="4" height="28" rx="2" fill="#B0BEC5" stroke="#607D8B" stroke-width="1.5"/></svg>`,
+  custom:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="36" height="36" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/><path d="M24 14v20M14 24h20" stroke="#2E7D32" stroke-width="3" stroke-linecap="round"/></svg>`,
+};
+function icon(name){const k=Object.keys(ICONS).find(k=>(name||'').toLowerCase().includes(k));return ICONS[k]||ICONS.custom;}
+
+// ════════════════════════════════════════
+// DATABASE
+// ════════════════════════════════════════
+const SIZES={wire:["1sq mm","1.5sq mm","2.5sq mm","4sq mm","6sq mm","10sq mm","16sq mm"],pipe:["½\"","¾\"","1\"","1¼\"","1½\"","2\"","3\"","4\""],"pipe l":["½\"","¾\"","1\"","1¼\"","2\""],conduit:["20mm","25mm","32mm","40mm","50mm"],bulb:["3W","5W","7W","9W","12W","15W","20W","25W"],fan:["48\"","56\"","900mm","1200mm","1400mm"],mcb:["6A","10A","16A","20A","25A","32A","40A","63A","100A"],switch:["1 way","2 way","1M","2M","4M","6M"],socket:["2 pin","3 pin 5A","3 pin 15A","6A","16A"],tile:["2x2ft","2x4ft","60x60cm","80x80cm"],"tmt bar":["8mm","10mm","12mm","16mm","20mm","25mm"],"db box":["4 way","6 way","8 way","12 way","16 way","24 way"],geyser:["6L","10L","15L","25L","35L","50L"],paint:["1L","4L","10L","20L"],cement:["50kg","25kg"]};
+const DB={
+  wire:[{b:"Havells",c:"Electrical",pop:true,p:"₹45/m"},{b:"Finolex",c:"Electrical",pop:true,p:"₹42/m"},{b:"Polycab",c:"Electrical",pop:true,p:"₹44/m"},{b:"KEI",c:"Electrical",pop:false,p:"₹40/m"},{b:"RR Kabel",c:"Electrical",pop:false,p:"₹38/m"},{b:"Anchor",c:"Electrical",pop:false,p:"₹41/m"},{b:"Sterlite",c:"Electrical",pop:false,p:"₹39/m"}],
+  "pipe l":[{b:"Supreme",c:"Plumbing",pop:true,p:"₹25/pc"},{b:"Ashirvad",c:"Plumbing",pop:true,p:"₹22/pc"},{b:"Finolex",c:"Plumbing",pop:true,p:"₹20/pc"},{b:"Prince",c:"Plumbing",pop:false,p:"₹18/pc"},{b:"Astral",c:"Plumbing",pop:false,p:"₹21/pc"}],
+  pipe:[{b:"Supreme",c:"Plumbing",pop:true,p:"₹120/pc"},{b:"Ashirvad",c:"Plumbing",pop:true,p:"₹115/pc"},{b:"Finolex",c:"Plumbing",pop:true,p:"₹110/pc"},{b:"Prince",c:"Plumbing",pop:false,p:"₹100/pc"},{b:"Astral",c:"Plumbing",pop:false,p:"₹105/pc"},{b:"Wavin",c:"Plumbing",pop:false,p:"₹108/pc"}],
+  bulb:[{b:"Philips",c:"Electrical",pop:true,p:"₹99/pc"},{b:"Syska",c:"Electrical",pop:true,p:"₹85/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹120/pc"},{b:"Bajaj",c:"Electrical",pop:true,p:"₹79/pc"},{b:"Wipro",c:"Electrical",pop:false,p:"₹95/pc"},{b:"Orient",c:"Electrical",pop:false,p:"₹88/pc"},{b:"Osram",c:"Electrical",pop:false,p:"₹110/pc"},{b:"Crompton",c:"Electrical",pop:false,p:"₹92/pc"}],
+  switch:[{b:"Havells",c:"Electrical",pop:true,p:"₹75/pc"},{b:"Legrand",c:"Electrical",pop:true,p:"₹150/pc"},{b:"Anchor",c:"Electrical",pop:true,p:"₹65/pc"},{b:"Schneider",c:"Electrical",pop:true,p:"₹130/pc"},{b:"Wipro",c:"Electrical",pop:false,p:"₹70/pc"},{b:"GM Modular",c:"Electrical",pop:false,p:"₹80/pc"},{b:"Crabtree",c:"Electrical",pop:false,p:"₹140/pc"},{b:"Panasonic",c:"Electrical",pop:false,p:"₹90/pc"}],
+  mcb:[{b:"Schneider",c:"Electrical",pop:true,p:"₹350/pc"},{b:"Legrand",c:"Electrical",pop:true,p:"₹320/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹300/pc"},{b:"ABB",c:"Electrical",pop:false,p:"₹400/pc"},{b:"Siemens",c:"Electrical",pop:false,p:"₹380/pc"},{b:"L&T",c:"Electrical",pop:false,p:"₹310/pc"}],
+  fan:[{b:"Crompton",c:"Electrical",pop:true,p:"₹1200/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹1500/pc"},{b:"Usha",c:"Electrical",pop:true,p:"₹1100/pc"},{b:"Orient",c:"Electrical",pop:true,p:"₹1300/pc"},{b:"Bajaj",c:"Electrical",pop:false,p:"₹1050/pc"},{b:"Anchor",c:"Electrical",pop:false,p:"₹1000/pc"},{b:"Khaitan",c:"Electrical",pop:false,p:"₹980/pc"}],
+  socket:[{b:"Anchor",c:"Electrical",pop:true,p:"₹90/pc"},{b:"Legrand",c:"Electrical",pop:true,p:"₹180/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹120/pc"},{b:"GM Modular",c:"Electrical",pop:false,p:"₹100/pc"},{b:"Crabtree",c:"Electrical",pop:false,p:"₹160/pc"}],
+  tape:[{b:"3M",c:"Electrical",pop:true,p:"₹35/roll"},{b:"Anchor",c:"Electrical",pop:true,p:"₹25/roll"},{b:"Tesa",c:"General",pop:false,p:"₹40/roll"},{b:"Denso",c:"Electrical",pop:false,p:"₹30/roll"}],
+  conduit:[{b:"Precision",c:"Electrical",pop:true,p:"₹55/m"},{b:"Polycab",c:"Electrical",pop:true,p:"₹60/m"},{b:"Finolex",c:"Electrical",pop:false,p:"₹52/m"},{b:"Avocab",c:"Electrical",pop:false,p:"₹50/m"}],
+  cement:[{b:"UltraTech",c:"Construction",pop:true,p:"₹380/bag"},{b:"ACC",c:"Construction",pop:true,p:"₹370/bag"},{b:"Ambuja",c:"Construction",pop:true,p:"₹375/bag"},{b:"Shree Cement",c:"Construction",pop:false,p:"₹360/bag"},{b:"Dalmia",c:"Construction",pop:false,p:"₹365/bag"},{b:"JSW",c:"Construction",pop:false,p:"₹362/bag"},{b:"Birla",c:"Construction",pop:false,p:"₹368/bag"}],
+  paint:[{b:"Asian Paints",c:"Hardware",pop:true,p:"₹250/L"},{b:"Berger",c:"Hardware",pop:true,p:"₹240/L"},{b:"Nerolac",c:"Hardware",pop:true,p:"₹230/L"},{b:"Dulux",c:"Hardware",pop:false,p:"₹260/L"},{b:"Indigo",c:"Hardware",pop:false,p:"₹220/L"}],
+  tile:[{b:"Kajaria",c:"Construction",pop:true,p:"₹55/sqft"},{b:"Somany",c:"Construction",pop:true,p:"₹52/sqft"},{b:"Orient Bell",c:"Construction",pop:true,p:"₹48/sqft"},{b:"Johnson",c:"Construction",pop:false,p:"₹45/sqft"},{b:"Nitco",c:"Construction",pop:false,p:"₹50/sqft"}],
+  geyser:[{b:"Racold",c:"Electrical",pop:true,p:"₹6500/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹7000/pc"},{b:"Bajaj",c:"Electrical",pop:true,p:"₹5500/pc"},{b:"AO Smith",c:"Electrical",pop:false,p:"₹9000/pc"},{b:"Crompton",c:"Electrical",pop:false,p:"₹6000/pc"}],
+  "db box":[{b:"Schneider",c:"Electrical",pop:true,p:"₹800/pc"},{b:"Legrand",c:"Electrical",pop:true,p:"₹900/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹750/pc"},{b:"Hager",c:"Electrical",pop:false,p:"₹1100/pc"}],
+  light:[{b:"Philips",c:"Electrical",pop:true,p:"₹350/pc"},{b:"Syska",c:"Electrical",pop:true,p:"₹300/pc"},{b:"Havells",c:"Electrical",pop:true,p:"₹400/pc"},{b:"Wipro",c:"Electrical",pop:false,p:"₹320/pc"},{b:"Bajaj",c:"Electrical",pop:false,p:"₹280/pc"}],
+  "tmt bar":[{b:"TATA Tiscon",c:"Construction",pop:true,p:"₹58/kg"},{b:"JSW",c:"Construction",pop:true,p:"₹56/kg"},{b:"SAIL",c:"Construction",pop:true,p:"₹55/kg"},{b:"Vizag Steel",c:"Construction",pop:false,p:"₹54/kg"},{b:"Kamdhenu",c:"Construction",pop:false,p:"₹53/kg"}],
+  marble:[{b:"Rajasthan Marble",c:"Construction",pop:true,p:"₹80/sqft"},{b:"Statuario",c:"Construction",pop:true,p:"₹120/sqft"},{b:"Kishangarh",c:"Construction",pop:false,p:"₹70/sqft"}],
+  plywood:[{b:"Greenply",c:"Hardware",pop:true,p:"₹80/sqft"},{b:"Century",c:"Hardware",pop:true,p:"₹75/sqft"},{b:"Kitply",c:"Hardware",pop:false,p:"₹70/sqft"},{b:"National",c:"Hardware",pop:false,p:"₹65/sqft"}],
+  screw:[{b:"Hira",c:"Hardware",pop:true,p:"₹5/pc"},{b:"Hillman",c:"Hardware",pop:true,p:"₹6/pc"},{b:"Stanley",c:"Hardware",pop:false,p:"₹8/pc"}],
+};
+const UNITS=["piece","meter","kg","liter","roll","bag","box","set","pair","feet","inch","sqft","bundle","coil"];
+const QITEMS=[{n:"Bulb",k:"bulb"},{n:"Wire",k:"wire"},{n:"Switch",k:"switch"},{n:"Pipe",k:"pipe"},{n:"Fan",k:"fan"},{n:"MCB",k:"mcb"},{n:"Cement",k:"cement"},{n:"Paint",k:"paint"},{n:"Tile",k:"tile"},{n:"Geyser",k:"geyser"},{n:"Socket",k:"socket"},{n:"Conduit",k:"conduit"},{n:"DB Box",k:"db box"},{n:"TMT Bar",k:"tmt bar"},{n:"Plywood",k:"plywood"}];
+const COLORS=["blue","green","orange","red","purple","teal"];
+const COLORLABELS={blue:"Blue",green:"Green",orange:"Orange",red:"Red",purple:"Purple",teal:"Teal"};
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let A={tab:"home",openProjId:null,filter:"All",search:"",suggs:[],sel:null,qty:1,unit:"piece",notes:"",size:"",weight:"",length:""};
+let projects=[],settings={name:"",phone:""},customProds={},freqItems={};
+
+function loadAll(){
+  try{
+    const d=JSON.parse(localStorage.getItem("mlp_v3")||"{}");
+    projects=d.projects||[];settings=d.settings||{name:"",phone:""};
+    customProds=d.customProds||{};freqItems=d.freqItems||{};
+  }catch(e){}
+  // Migrate from old versions
+  try{
+    const old=JSON.parse(localStorage.getItem("matlist_v3")||"{}");
+    if(old.projects&&old.projects.length&&!projects.length){
+      projects=old.projects.map(p=>({...p,color:"blue",items:(p.items||[]).map(i=>({...i,purchased:false}))}));
+    }
+  }catch(e){}
+  if(!projects.length){
+    projects=[
+      {id:"p1",name:"Home A",emoji:"🏠",color:"blue",items:[],done:false},
+      {id:"p2",name:"Home B",emoji:"🏡",color:"green",items:[],done:false},
+    ];
+  }
+}
+function saveAll(){try{localStorage.setItem("mlp_v3",JSON.stringify({projects,settings,customProds,freqItems}));}catch(e){}}
+function proj(id){return projects.find(p=>p.id===id)||projects[0];}
+function openProj(){return A.openProjId?proj(A.openProjId):null;}
+
+// Frequency tracking
+function trackFreq(key){freqItems[key]=(freqItems[key]||0)+1;saveAll();}
+function topFreq(n=5){return Object.entries(freqItems).sort((a,b)=>b[1]-a[1]).slice(0,n).map(e=>e[0]);}
+
+// Search
+function allDB(){
+  const m={};
+  for(const[k,v]of Object.entries(DB))m[k]=[...v];
+  for(const[k,v]of Object.entries(customProds)){if(m[k])m[k]=[...v,...m[k]];else m[k]=[...v];}
+  return m;
+}
+function doSearch(q){
+  if(!q.trim())return[];
+  const low=q.toLowerCase().trim();
+  const all=allDB();const out=[];
+  for(const[key,brands]of Object.entries(all)){
+    if(key.includes(low)||low.includes(key)||key.startsWith(low[0])){
+      brands.forEach(b=>out.push({...b,key}));
+    }
+  }
+  out.sort((a,b)=>(b.pop?1:0)-(a.pop?1:0));
+  const seen=new Set();
+  return out.filter(r=>{const k=r.b+r.key;if(seen.has(k))return false;seen.add(k);return true;}).slice(0,30);
+}
+
+// Price parser
+function parsePrice(p){if(!p)return 0;const m=p.match(/[\d.]+/);return m?parseFloat(m[0]):0;}
+function calcTotal(items){
+  return items.reduce((s,item)=>{
+    const u=parsePrice(item.price);
+    return s+(u*item.qty);
+  },0);
+}
+
+// ════════════════════════════════════════
+// RENDER ENGINE
+// ════════════════════════════════════════
+const h=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function render(){
+  ['home','search','settings','about'].forEach(t=>{
+    const el=document.getElementById('nb-'+t);
+    if(el)el.className='nbtn'+(A.tab===t?' active':'');
+  });
+  updatePendingBadge();
+  document.getElementById('app').innerHTML=
+    A.tab==='home'?renderHome():
+    A.tab==='search'?renderSearch():
+    A.tab==='settings'?renderSettings():
+    renderAbout();
+}
+
+function updatePendingBadge(){
+  const total=projects.reduce((s,p)=>s+p.items.filter(i=>!i.purchased).length,0);
+  const b=document.getElementById('pendingBadge');
+  if(b){b.textContent=total;b.style.display=total>0?'':'none';}
+}
+
+// ── HOME ──
+function renderHome(){
+  if(A.openProjId)return renderDetail();
+  let s=`<div class="content">`;
+  if(!localStorage.getItem("mlp_install_ok")){
+    s+=`<div class="ibanner"><div style="font-size:22px">📲</div><div class="ibtext">Install as App<div class="ibsub">Chrome → ⋮ → Add to Home Screen</div></div><button class="ibbtn" onclick="localStorage.setItem('mlp_install_ok','1');render()">Got it</button></div>`;
+  }
+  s+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:15px;font-weight:900">My Projects</div><div style="font-size:12px;color:var(--muted)">${projects.length} project${projects.length!==1?'s':''}</div></div>`;
+  projects.forEach(p=>{
+    const pending=p.items.filter(i=>!i.purchased).length;
+    const total=p.items.length;
+    s+=`<div class="pcard${p.done?' done':''}" onclick="openProject('${p.id}')">
+      <div class="pemoji pc-${p.color||'blue'}">${p.emoji||'🏠'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="pname">${h(p.name)}</div>
+        <div class="pmeta">${total} items${pending>0?` • ${pending} pending`:''} ${p.done?'• ✅ Done':''}</div>
+      </div>
+      <div style="display:flex;gap:7px;align-items:center;flex-shrink:0">
+        <span class="pchip pcc-${p.color||'blue'}">${p.done?'Done':'Active'}</span>
+        ${projects.length>1?`<button class="btn btn-red btn-icon" onclick="event.stopPropagation();confirmDeleteProject('${p.id}')">🗑</button>`:''}
+      </div>
+    </div>`;
+  });
+  s+=`<button class="add-proj" onclick="openNewProjectSheet()"><span style="font-size:20px">➕</span> Add New Project / Site</button></div>`;
+  return s;
+}
+
+// ── PROJECT DETAIL ──
+function renderDetail(){
+  const p=openProj();if(!p)return renderHome();
+  const all=p.items||[];
+  const cats=['All',...new Set(all.map(i=>i.cat))];
+  const filtered=A.filter==='All'?all:all.filter(i=>i.cat===A.filter);
+  const pending=all.filter(i=>!i.purchased).length;
+  const total=calcTotal(all);
+
+  let s=`<div class="content">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+    <button class="backbtn" onclick="closeProject()">← Back</button>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:17px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.emoji||'🏠'} ${h(p.name)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">${all.length} items • ${pending} pending</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="openExportSheet('${p.id}')" style="flex-shrink:0">📤 Export</button>
+    <button class="btn btn-icon" style="background:var(--blue-light);color:var(--blue);flex-shrink:0;border:none" onclick="openCloneSheet('${p.id}')" title="Clone to another project">⎘</button>
+  </div>`;
+
+  // Summary
+  if(all.length>0){
+    s+=`<div class="sumbox">
+      <div style="font-size:11px;font-weight:800;color:var(--blue)">📊 SUMMARY</div>
+      <div class="sumgrid">
+        <div class="sumitem"><div class="sumnum">${all.length}</div><div class="sumlabel">Items</div></div>
+        <div class="sumitem"><div class="sumnum">${all.reduce((s,i)=>s+i.qty,0)}</div><div class="sumlabel">Total Qty</div></div>
+        <div class="sumitem"><div class="sumnum">${pending}</div><div class="sumlabel">Pending</div></div>
+        <div class="sumitem"><div class="sumnum">${all.filter(i=>i.purchased).length}</div><div class="sumlabel">Bought</div></div>
+      </div>
+    </div>
+    <div class="costtotal">
+      <div><div class="ctlabel">Estimated Total Cost</div><div class="ctnote">Visible in app only • Not in exports</div></div>
+      <div style="text-align:right"><div class="ctvalue">₹${total>0?total.toLocaleString('en-IN'):'—'}</div></div>
+    </div>`;
+  }
+
+  if(p.done){
+    s+=`<div class="donebanner"><div style="font-size:28px">✅</div><div class="dbtext"><div class="dbtitle">Project Done!</div><div class="dbsub">All materials listed</div></div><button class="dbbtn" onclick="toggleDone('${p.id}')">Reopen</button></div>`;
+  }
+
+  // Category filter
+  if(cats.length>2){
+    s+=`<div class="ftabs">${cats.map(c=>`<button class="ftab${A.filter===c?' active':''}" onclick="setFilter('${c}')">${c}</button>`).join('')}</div>`;
+  }
+
+  if(!filtered.length){
+    s+=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">${A.filter!=='All'?'No '+A.filter+' items':'No items yet'}</div><div class="empty-sub">Tap <b style="color:var(--blue)">+</b> to add materials</div></div>`;
+  } else {
+    filtered.forEach(item=>{
+      s+=`<div class="litem${item.purchased?' purchased':''}">
+        <div class="ltop">
+          <div class="limg">${icon(item.key||item.name)}</div>
+          <div style="flex:1;min-width:0">
+            <div class="lname">${h(item.name)}</div>
+            <div class="lbrand">${h(item.brand)} • ${item.cat}<span class="lprice">${item.price||''}</span></div>
+          </div>
+          <div class="lqty">
+            <button class="qbtn" onclick="chQty('${p.id}','${item.id}',-1)">−</button>
+            <span class="qnum">${item.qty}</span>
+            <button class="qbtn" onclick="chQty('${p.id}','${item.id}',1)">+</button>
+          </div>
+          <div class="lactions">
+            <button class="btn btn-icon ${item.purchased?'btn-green':'btn-ghost'}" style="border:none" onclick="togglePurchased('${p.id}','${item.id}')" title="${item.purchased?'Mark unpurchased':'Mark purchased'}">✓</button>
+            <button class="btn btn-red btn-icon" onclick="delItem('${p.id}','${item.id}')">🗑</button>
+          </div>
+        </div>
+        <div class="lbot">
+          <span class="chip">${item.unit}</span>
+          ${item.size?`<span class="chip g">📐 ${h(item.size)}</span>`:''}
+          ${item.length?`<span class="chip g">📏 ${h(item.length)}</span>`:''}
+          ${item.weight?`<span class="chip g">⚖️ ${h(item.weight)}</span>`:''}
+          ${item.purchased?`<span class="chip purchased-chip">✅ Purchased</span>`:''}
+          ${item.notes?`<span class="lnotes">"${h(item.notes)}"</span>`:''}
+        </div>
+      </div>`;
+    });
+  }
+
+  if(!p.done&&all.length>0){
+    s+=`<button class="btn btn-green btn-xl" onclick="toggleDone('${p.id}')" style="margin-top:14px">✅ Mark Project as Done</button>`;
+  }
+  s+=`</div>`;
+  s+=`<button class="fab" onclick="go('search')">＋</button>`;
+  return s;
+}
+
+// ── SEARCH ──
+function renderSearch(){
+  const cp=A.openProjId?openProj():projects[0];
+  let s=`<div class="content">
+  <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600">Adding to: <b style="color:var(--blue)">${h(cp?cp.name:'')}</b> <span onclick="go('home')" style="margin-left:7px;color:var(--blue);text-decoration:underline;cursor:pointer;font-size:11px">Change ›</span></div>
+  <div class="card">
+  <div class="ctitle">🔍 Search Items &amp; Brands</div>
+  <div class="swrap">
+    <span class="sicon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="#8A96B0" stroke-width="2.2"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke="#8A96B0" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+    <input class="sinput" id="SI" type="text" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Type: bulb, wire, pipe, switch..." value="${h(A.search)}" oninput="onSearch(this.value)"/>
+    ${A.search?`<button class="sclear" onclick="clearS()">×</button>`:''}
+  </div>
+  <div id="SR"></div></div>`;
+
+  // Frequent items
+  const freq=topFreq(5);
+  if(freq.length){
+    s+=`<div class="card"><div class="freq-section"><div class="freq-title">🔁 Your Frequent Items</div><div class="qchips">${freq.map(k=>`<button class="qchip" onclick="qs('${k}')" style="border-color:#CE93D8;color:#6A1B9A">${icon(k).replace('viewBox','width="18" height="18" viewBox')} ${k}</button>`).join('')}</div></div>`;
+  } else {
+    s+=`<div class="card">`;
+  }
+  s+=`<div class="ctitle">⚡ Quick Search</div><div class="qchips">${QITEMS.map(q=>`<button class="qchip" onclick="qs('${q.k}')">${icon(q.k).replace('viewBox','width="18" height="18" viewBox')} ${q.n}</button>`).join('')}</div></div>`;
+  s+=`</div>`;
+  return s;
+}
+
+function buildSR(){
+  let s='';
+  if(A.sel){
+    const p=A.sel;const szs=SIZES[p.key]||[];
+    s+=`<div class="aform">
+      <div class="aform-hdr"><div class="aform-img">${icon(p.key)}</div><div><div class="aform-brand">${h(p.b)}</div><div class="aform-item">${h((p.key||'').toUpperCase())} • ${p.p||'Custom'}</div></div></div>
+      <div class="fgrid">
+        <div class="fgroup"><div class="flabel">Quantity</div>
+          <div class="qty-picker"><button class="qbtn" onclick="A.qty=Math.max(1,A.qty-1);document.getElementById('QI').textContent=A.qty">−</button><span class="qnum" id="QI">${A.qty}</span><button class="qbtn" onclick="A.qty++;document.getElementById('QI').textContent=A.qty">+</button></div>
+        </div>
+        <div class="fgroup"><div class="flabel">Unit</div><select class="sel" onchange="A.unit=this.value">${UNITS.map(u=>`<option ${u===A.unit?'selected':''}>${u}</option>`).join('')}</select></div>
+        ${szs.length?`<div class="fgroup full"><div class="flabel">Size / Rating</div><select class="sel" onchange="A.size=this.value"><option value="">-- Select --</option>${szs.map(z=>`<option ${z===A.size?'selected':''}>${z}</option>`).join('')}</select></div>`:`<div class="fgroup full"><div class="flabel">Size (optional)</div><input class="inp" type="text" inputmode="text" placeholder="e.g. 2.5sq mm, 1 inch..." value="${h(A.size)}" oninput="A.size=this.value"/></div>`}
+        <div class="fgroup"><div class="flabel">Length</div><input class="inp" type="text" inputmode="text" placeholder="e.g. 10m" value="${h(A.length)}" oninput="A.length=this.value"/></div>
+        <div class="fgroup"><div class="flabel">Weight</div><input class="inp" type="text" inputmode="text" placeholder="e.g. 2kg" value="${h(A.weight)}" oninput="A.weight=this.value"/></div>
+        <div class="fgroup full"><div class="flabel">Notes</div><input class="inp" type="text" inputmode="text" placeholder="Any notes..." value="${h(A.notes)}" oninput="A.notes=this.value"/></div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:4px">
+        <button class="btn btn-blue btn-lg" onclick="addItem()">➕ Add to List</button>
+        <button class="btn btn-outline btn-md" onclick="A.sel=null;buildSR()" style="flex-shrink:0;width:auto">Back</button>
+      </div>
+    </div>`;
+    return document.getElementById('SR').innerHTML=s,void 0;
+  }
+
+  if(A.search.trim()){
+    const saved=(customProds[A.search.toLowerCase().trim()]||[]);
+    s+=`<div class="cbox"><div class="cbox-title">✏️ Add Custom / New Product</div>
+      <div class="crow"><input class="cinp" type="text" inputmode="text" id="CN" placeholder="Product name" value="${h(A.search)}" oninput="A.cname=this.value"/></div>
+      <div class="crow"><input class="cinp" type="text" inputmode="text" id="CB" placeholder="Brand / Company" value="" oninput="A.cbrand=this.value"/><button class="btn btn-blue btn-sm" onclick="saveCustom()" style="flex-shrink:0;white-space:nowrap">+ Save &amp; Use</button></div>
+      ${saved.length?`<div style="margin-top:8px;font-size:11px;font-weight:800;color:var(--blue);margin-bottom:5px">YOUR SAVED:</div><div>${saved.map((c,i)=>`<span class="saved-chip" onclick="selCustom(${i},'${h(A.search.toLowerCase().trim())}')">${icon(A.search)} ${c.b} <span style="color:var(--muted);cursor:pointer" onclick="event.stopPropagation();delCustom('${h(A.search.toLowerCase().trim())}',${i})">×</span></span>`).join('')}</div>`:''}
+    </div>`;
+  }
+
+  if(A.suggs.length){
+    s+=`<div style="font-size:10px;color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:8px 0 7px">⭐ Popular Brands First</div>`;
+    A.suggs.forEach((sg,i)=>{
+      s+=`<div class="sitem${sg.pop?' pop':''}${sg.custom?' freq':''}" onclick="selSugg(${i})">
+        <div class="simg">${icon(sg.key)}</div>
+        <div style="flex:1;min-width:0"><div class="sbrand">${h(sg.b)}</div><div class="scat">${(sg.key||'').toUpperCase()} • ${sg.c}${sg.custom?' • ⭐':''}</div></div>
+        <div><div class="sprice">${sg.p||'Custom'}</div>${sg.pop?`<span class="sbadge" style="background:var(--blue)">★ TOP</span>`:sg.custom?`<span class="sbadge" style="background:#6A1B9A">SAVED</span>`:''}</div>
+      </div>`;
+    });
+  } else if(A.search&&!A.suggs.length){
+    s+=`<div style="text-align:center;padding:14px 0;color:var(--muted);font-size:13px">No results — use the custom entry above ↑</div>`;
+  }
+  document.getElementById('SR').innerHTML=s;
+}
+
+// ── SETTINGS ──
+function renderSettings(){
+  return`<div class="content">
+  <div style="font-size:15px;font-weight:900;margin-bottom:14px">⚙️ Settings</div>
+  <div class="setsec">Your Profile (appears on PDF exports)</div>
+  <div class="setrow">
+    <div class="seticon">👤</div>
+    <div style="flex:1"><div class="setlabel">Your Name</div><div class="setsub">Optional — shown on PDF header</div></div>
+  </div>
+  <input class="inp" type="text" inputmode="text" placeholder="e.g. Nafih KC, Ravi Electricals..." value="${h(settings.name)}" oninput="settings.name=this.value;saveAll()" style="margin-bottom:10px"/>
+  <div class="setrow">
+    <div class="seticon">📞</div>
+    <div style="flex:1"><div class="setlabel">Your Phone</div><div class="setsub">Optional — shown on PDF header</div></div>
+  </div>
+  <input class="inp" type="tel" inputmode="tel" placeholder="e.g. 9876543210" value="${h(settings.phone)}" oninput="settings.phone=this.value;saveAll()" style="margin-bottom:14px"/>
+  <div class="setsec">App Data</div>
+  <div class="setrow" onclick="clearFreq()" style="cursor:pointer">
+    <div class="seticon">🔁</div>
+    <div><div class="setlabel">Clear Frequent Items</div><div class="setsub">Reset your search history</div></div>
+  </div>
+  <div class="setsec">Backup &amp; Restore</div>
+  <div style="background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--radius);padding:14px;margin-bottom:10px">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">💡 How to keep your data safe</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7">Tap <b>Backup</b> → share the file to <b>WhatsApp Saved Messages</b> or <b>Google Drive</b>. If you ever change phone or reinstall, tap <b>Restore</b> and pick that file.</div>
+  </div>
+  <div class="setrow" onclick="backupData()" style="cursor:pointer">
+    <div class="seticon">📤</div>
+    <div style="flex:1"><div class="setlabel">Backup All Data</div><div class="setsub">Save projects + settings as a file</div></div>
+    <div style="font-size:12px;font-weight:800;color:var(--blue);background:var(--blue-light);border-radius:8px;padding:5px 12px">Backup</div>
+  </div>
+  <div class="setrow" style="cursor:pointer;position:relative">
+    <div class="seticon">📥</div>
+    <div style="flex:1"><div class="setlabel">Restore Data</div><div class="setsub">Load from a backup file</div></div>
+    <div style="font-size:12px;font-weight:800;color:var(--green);background:var(--green-light);border-radius:8px;padding:5px 12px">Restore</div>
+    <input type="file" accept=".json" onchange="restoreData(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%"/>
+  </div>
+  </div>`;
+}
+
+// ── ABOUT ──
+function renderAbout(){
+  return`<div class="content">
+  <div class="github-card">
+    <div class="gha">👨‍💻</div>
+    <div style="flex:1">
+      <div class="ghname">NAFIH KC</div>
+      <div class="ghsub">Developer &amp; Creator of MatList Pro</div>
+      <a href="https://github.com/nafih-kc" target="_blank" class="ghbtn">🐙 GitHub</a>
+    </div>
+  </div>
+  <div class="card" style="text-align:center;padding:22px 18px">
+    <div style="font-size:46px;margin-bottom:10px">🛠️</div>
+    <div style="font-size:21px;font-weight:900;color:var(--blue)">MatList Pro</div>
+    <div class="vbadge">v3.8 — PDF &amp; HTML Fixed</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:6px">Made for Indian Professionals</div>
+    <div style="margin-top:16px;text-align:left">
+    ${[["🔍","Search 250+ Indian brands"],["⭐","Popular brands listed first"],["✏️","Custom products — save your own"],["🖼️","SVG icons for every material"],["📁","Multiple project tabs with colors"],["➕","+ / − quantity on every item"],["✅","Mark items as Purchased"],["💰","Total cost estimator (app only)"],["📐","Size, Length &amp; Weight fields"],["🔁","Frequent items shortcut"],["🎨","Project color labels"],["⎘","Clone project items"],["📤","Export: PDF / Text / WhatsApp"],["👤","Your name &amp; phone on PDF"],["💲","Prices hidden in all exports"],["💾","Auto-saves offline"],["📊","Category filter inside projects"],["🔒","Backup &amp; Restore data as JSON file"]].map(([ic,tx])=>`<div class="afeat"><span style="font-size:19px">${ic}</span>${tx}</div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="text-align:center">
+    <div style="font-size:13px;color:var(--text2);line-height:2;font-weight:600"><b style="color:var(--blue)">📲 Install on Android:</b><br/>Chrome → ⋮ → "Add to Home screen"<br/><span style="font-size:11px;color:var(--muted)">Works fully offline!</span></div>
+  </div></div>`;
+}
+
+// ════════════════════════════════════════
+// ACTIONS
+// ════════════════════════════════════════
+function go(tab){
+  A.tab=tab;A.sel=null;
+  render();
+  if(tab==='search'){
+    requestAnimationFrame(()=>{
+      buildSR();
+      const el=document.getElementById('SI');
+      if(el&&!A.search)el.focus();
+    });
+  }
+}
+
+function onSearch(val){
+  A.search=val;A.sel=null;A.cname=val;
+  A.suggs=doSearch(val);
+  buildSR();
+  // update clear btn
+  const w=document.querySelector('.swrap');
+  if(w){let cb=w.querySelector('.sclear');if(val&&!cb){cb=document.createElement('button');cb.className='sclear';cb.textContent='×';cb.onclick=clearS;w.appendChild(cb);}else if(!val&&cb)cb.remove();}
+}
+
+function qs(key){A.search=key;A.sel=null;A.suggs=doSearch(key);A.tab='search';render();requestAnimationFrame(()=>buildSR());}
+function clearS(){A.search='';A.suggs=[];A.sel=null;A.cname='';render();requestAnimationFrame(()=>buildSR());}
+function selSugg(i){A.sel=A.suggs[i];buildSR();}
+function selCustom(i,key){const c=customProds[key][i];if(c)A.sel={...c,key};buildSR();}
+function delCustom(key,i){if(customProds[key]){customProds[key].splice(i,1);if(!customProds[key].length)delete customProds[key];saveAll();buildSR();}}
+
+function saveCustom(){
+  const name=(document.getElementById('CN')?.value||A.search).trim();
+  const brand=(document.getElementById('CB')?.value||'').trim();
+  if(!name){toast('⚠️ Enter product name');return;}
+  if(!brand){toast('⚠️ Enter brand name');return;}
+  const key=name.toLowerCase();
+  const entry={b:brand,c:'Custom',p:'',pop:true,custom:true};
+  if(!customProds[key])customProds[key]=[];
+  if(!customProds[key].find(c=>c.b.toLowerCase()===brand.toLowerCase())){customProds[key].unshift(entry);saveAll();toast(`✅ "${brand}" saved!`);}
+  A.sel={...entry,key};buildSR();
+}
+
+function setFilter(f){A.filter=f;render();}
+
+function addItem(){
+  const p=A.sel;if(!p)return;
+  const targetId=A.openProjId||projects[0].id;
+  const pr=proj(targetId);if(!pr)return;
+  const item={id:Date.now().toString(),name:(p.key||'').charAt(0).toUpperCase()+(p.key||'').slice(1)||p.b,key:p.key,brand:p.b,cat:p.c,price:p.p,qty:A.qty,unit:A.unit,notes:A.notes,size:A.size,length:A.length,weight:A.weight,purchased:false};
+  pr.items.push(item);
+  trackFreq(p.key||item.name.toLowerCase());
+  saveAll();
+  A.search='';A.suggs=[];A.sel=null;A.qty=1;A.notes='';A.size='';A.length='';A.weight='';
+  toast(`✅ ${p.b} ${item.name} added!`);
+  A.openProjId=targetId;A.tab='home';render();
+}
+
+function chQty(pid,iid,d){const pr=proj(pid);if(!pr)return;const it=pr.items.find(i=>i.id===iid);if(!it)return;it.qty=Math.max(1,it.qty+d);saveAll();render();}
+function delItem(pid,iid){const pr=proj(pid);if(!pr)return;pr.items=pr.items.filter(i=>i.id!==iid);saveAll();render();}
+function togglePurchased(pid,iid){const pr=proj(pid);if(!pr)return;const it=pr.items.find(i=>i.id===iid);if(!it)return;it.purchased=!it.purchased;saveAll();render();}
+function toggleDone(pid){const pr=proj(pid);if(!pr)return;pr.done=!pr.done;saveAll();render();if(pr.done)toast('✅ Project marked Done!');}
+function openProject(id){A.openProjId=id;A.filter='All';render();}
+function closeProject(){A.openProjId=null;render();}
+function clearFreq(){freqItems={};saveAll();toast('🔁 Frequency reset');render();}
+
+// ── CLONE PROJECT ──
+function openCloneSheet(fromId){
+  const targets=projects.filter(p=>p.id!==fromId);
+  if(!targets.length){toast('⚠️ Need at least 2 projects to clone');return;}
+  showSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">⎘ Clone Items To...</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">This will copy all items to another project. You can edit after.</div>
+    ${targets.map(p=>`<div class="exp-opt" onclick="doClone('${fromId}','${p.id}')">
+      <div class="exp-icon pc-${p.color||'blue'}">${p.emoji||'🏠'}</div>
+      <div><div class="exp-label">${h(p.name)}</div><div class="exp-sub">${p.items.length} items currently</div></div>
+    </div>`).join('')}
+    <button class="btn btn-outline btn-lg" onclick="closeSheet()" style="margin-top:6px">Cancel</button>
+  `);
+}
+
+function doClone(fromId,toId){
+  const src=proj(fromId);const dst=proj(toId);if(!src||!dst)return;
+  const copies=src.items.map(i=>({...i,id:Date.now().toString()+Math.random().toString(36).slice(2),purchased:false}));
+  dst.items=[...dst.items,...copies];
+  saveAll();closeSheet();toast(`⎘ ${copies.length} items cloned to ${dst.name}!`);
+}
+
+// ── NEW PROJECT SHEET ──
+function openNewProjectSheet(){
+  showSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">📁 New Project / Site</div>
+    <div class="fgroup" style="margin-bottom:10px"><div class="flabel">Project Name</div><input class="minp" id="NPName" type="text" placeholder="e.g. Home A, Office, Shop..."/></div>
+    <div class="fgroup" style="margin-bottom:10px"><div class="flabel">Emoji</div><input class="minp" id="NPEmoji" type="text" placeholder="🏠" maxlength="2" value="🏠"/></div>
+    <div class="fgroup" style="margin-bottom:14px"><div class="flabel">Color Label</div>
+      <div class="cpicker">${COLORS.map(c=>`<div class="copt pcc-${c}" id="cp_${c}" onclick="pickColor('${c}')">${c===A._newColor?' ✓':''}</div>`).join('')}</div>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button class="btn btn-blue btn-lg" onclick="createProject()">✅ Create</button>
+      <button class="btn btn-outline btn-md" onclick="closeSheet()" style="flex-shrink:0;width:auto">Cancel</button>
+    </div>
+  `);
+  A._newColor='blue';
+  setTimeout(()=>document.getElementById('NPName')?.focus(),120);
+}
+
+function pickColor(c){
+  A._newColor=c;
+  COLORS.forEach(col=>{const el=document.getElementById('cp_'+col);if(el)el.innerHTML=col===c?'✓':'';});
+}
+
+function createProject(){
+  const name=document.getElementById('NPName')?.value.trim();
+  if(!name){toast('⚠️ Enter a project name');return;}
+  const emoji=document.getElementById('NPEmoji')?.value.trim()||'🏠';
+  const id='p'+Date.now();
+  projects.push({id,name,emoji,color:A._newColor||'blue',items:[],done:false});
+  saveAll();closeSheet();A.openProjId=id;A.tab='home';render();
+}
+
+function confirmDeleteProject(id){
+  const p=proj(id);
+  showSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">🗑 Delete Project?</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:18px">Delete "<b>${h(p?.name)}</b>" and all ${p?.items.length||0} items? This cannot be undone.</div>
+    <div style="display:flex;gap:9px">
+      <button class="btn btn-red btn-lg" onclick="deleteProject('${id}')">Yes, Delete</button>
+      <button class="btn btn-outline btn-md" onclick="closeSheet()" style="flex-shrink:0;width:auto">Cancel</button>
+    </div>
+  `);
+}
+
+function deleteProject(id){
+  if(projects.length<=1){toast('⚠️ Need at least one project');return;}
+  projects=projects.filter(p=>p.id!==id);
+  if(A.openProjId===id)A.openProjId=null;
+  saveAll();closeSheet();render();
+}
+
+// ════════════════════════════════════════
+// EXPORT FUNCTIONS — v3.6
+// All exports show content INSIDE the app
+// Works in Chrome AND APK WebView — no downloads needed
+// ════════════════════════════════════════
+
+// Store current export project id
+let _exportPid=null;
+
+function openExportSheet(pid){
+  _exportPid=pid;
+  showSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">📤 Export List</div>
+    <div class="exp-opt" onclick="closeSheet();doExport('pdf')">
+      <div class="exp-icon" style="background:#FFEBEE">📄</div>
+      <div><div class="exp-label">PDF / Print</div><div class="exp-sub">Preview → Screenshot or Print</div></div>
+    </div>
+    <div class="exp-opt" onclick="closeSheet();doExport('html')">
+      <div class="exp-icon" style="background:#E3F2FD">🌐</div>
+      <div><div class="exp-label">HTML Preview</div><div class="exp-sub">Full formatted list view</div></div>
+    </div>
+    <div class="exp-opt" onclick="closeSheet();doExport('text')">
+      <div class="exp-icon" style="background:#E8F5E9">📝</div>
+      <div><div class="exp-label">Copy as Text</div><div class="exp-sub">Copy and paste anywhere</div></div>
+    </div>
+    <div class="exp-opt" onclick="closeSheet();doExport('wa')">
+      <div class="exp-icon" style="background:#E8F5E9">💬</div>
+      <div><div class="exp-label">Share via WhatsApp</div><div class="exp-sub">Send formatted list directly</div></div>
+    </div>
+    <button class="btn btn-outline btn-lg" onclick="closeSheet()" style="margin-top:6px">Cancel</button>
+  `);
+}
+
+function doExport(type){
+  const p=proj(_exportPid);
+  if(!p||!p.items.length){toast('⚠️ No items to export');return;}
+
+  if(type==='wa'){
+    const nm=settings.name?'*'+settings.name+'*\n':'';
+    const ph=settings.phone?'📞 '+settings.phone+'\n':'';
+    let txt='🛠️ *MatList Pro*\n'+nm+ph+'\n📋 *'+p.name+' — Materials List*\n📦 '+p.items.length+' items\n\n';
+    p.items.forEach(function(item,i){
+      txt+=(i+1)+'. *'+item.name+'* — '+item.brand+'\n';
+      txt+='   Qty: '+item.qty+' '+item.unit;
+      if(item.size) txt+=' | '+item.size;
+      if(item.notes) txt+=' | '+item.notes;
+      txt+='\n   '+(item.purchased?'✅ Purchased':'⏳ Pending')+'\n\n';
+    });
+    txt+='_MatList Pro v3.6 • github.com/nafih-kc_';
+    // Try WhatsApp deep link first, fallback to web
+    var a=document.createElement('a');
+    a.href='whatsapp://send?text='+encodeURIComponent(txt);
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(function(){
+      var a2=document.createElement('a');
+      a2.href='https://wa.me/?text='+encodeURIComponent(txt);
+      a2.target='_blank';
+      document.body.appendChild(a2);a2.click();document.body.removeChild(a2);
+    },1500);
+    toast('💬 Opening WhatsApp...');
+    return;
+  }
+
+  if(type==='text'){
+    var d=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+    var txt2='================================\n';
+    txt2+='   MATLIST PRO — Materials\n';
+    txt2+='================================\n';
+    if(settings.name) txt2+='Name  : '+settings.name+'\n';
+    if(settings.phone) txt2+='Phone : '+settings.phone+'\n';
+    txt2+='Date  : '+d+'\n';
+    txt2+='Site  : '+p.name+'\n';
+    txt2+='Items : '+p.items.length+'\n';
+    txt2+='================================\n\n';
+    p.items.forEach(function(item,i){
+      txt2+=(i+1)+'. '+item.name+'\n';
+      txt2+='   Brand : '+item.brand+'\n';
+      txt2+='   Qty   : '+item.qty+' '+item.unit+'\n';
+      if(item.size)   txt2+='   Size  : '+item.size+'\n';
+      if(item.length) txt2+='   Len   : '+item.length+'\n';
+      if(item.weight) txt2+='   Wt    : '+item.weight+'\n';
+      if(item.notes)  txt2+='   Note  : '+item.notes+'\n';
+      txt2+='   Status: '+(item.purchased?'✅ Purchased':'⏳ Pending')+'\n\n';
+    });
+    txt2+='================================\nMatList Pro v3.6 by NAFIH KC\n================================';
+    // Show text inside app with copy button
+    showSheet(
+      '<div class="sheet-handle"></div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'+
+        '<div class="sheet-title" style="margin:0">📝 Text List</div>'+
+        '<button class="btn btn-blue btn-sm" onclick="copyExportText()">📋 Copy All</button>'+
+      '</div>'+
+      '<textarea id="exportTxt" readonly style="width:100%;height:300px;border:1.5px solid #D4DCF0;border-radius:10px;padding:12px;font-family:monospace;font-size:12px;color:#0D1B3E;background:#F4F7FF;resize:none;line-height:1.6"></textarea>'+
+      '<p style="font-size:12px;color:#8A96B0;margin-top:8px;text-align:center">Tap Copy All → paste in WhatsApp / Word / Notes</p>'+
+      '<button class="btn btn-outline btn-lg" onclick="closeSheet()" style="margin-top:10px">Close</button>'
+    );
+    // Set value after sheet renders — avoids any HTML encoding issues
+    setTimeout(function(){
+      var el=document.getElementById('exportTxt');
+      if(el){el.value=txt2;}
+    },60);
+    return;
+  }
+
+  if(type==='pdf'||type==='html'){
+    // Build the clean list document first
+    var doc=buildListDoc(p, type==='pdf');
+
+    // Try direct file download (works in Chrome browser)
+    var downloaded=false;
+    try{
+      var blob=new Blob([doc],{type:'text/html;charset=utf-8'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;
+      a.download=(p.name+'_list'+(type==='pdf'?'_PDF':'_HTML')+'.html').replace(/\s+/g,'_');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},3000);
+      downloaded=true;
+    }catch(e){downloaded=false;}
+
+    if(downloaded){
+      if(type==='pdf'){
+        toast('📄 Downloaded! Open the file → tap Print → Save as PDF');
+      } else {
+        toast('🌐 HTML file downloaded!');
+      }
+    } else {
+      // APK fallback — show inside app
+      showFullPreview(p, type==='pdf', doc);
+    }
+    return;
+  }
+
+function buildListDoc(p, addPrint){
+  var d=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
+  var rows='';
+  for(var i=0;i<p.items.length;i++){
+    var item=p.items[i];
+    rows+='<tr style="background:'+(i%2===0?'#ffffff':'#F5F8FF')+'">'
+      +'<td>'+(i+1)+'</td>'
+      +'<td><b>'+esc(item.name)+'</b></td>'
+      +'<td>'+esc(item.brand)+'</td>'
+      +'<td>'+esc(item.cat)+'</td>'
+      +'<td><b>'+item.qty+'</b> '+esc(item.unit)+'</td>'
+      +'<td>'+esc(item.size||'—')+'</td>'
+      +'<td>'+esc(item.length||'—')+'</td>'
+      +'<td>'+esc(item.weight||'—')+'</td>'
+      +'<td style="color:'+(item.purchased?'#1B7F4F':'#C62828')+'">'+(item.purchased?'✅ Bought':'⏳ Pending')+'</td>'
+      +'<td style="color:#888;font-style:italic">'+esc(item.notes||'')+'</td>'
+      +'</tr>';
+  }
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
+    +'<meta name="viewport" content="width=device-width,initial-scale=1"/>'
+    +'<title>'+esc(p.name)+' — Materials List</title>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{font-family:Arial,sans-serif;padding:24px;color:#0D1B3E;background:#fff;max-width:900px;margin:0 auto}'
+    +'.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #1565C0;margin-bottom:16px}'
+    +'.logo{font-size:20px;font-weight:900;color:#1565C0}'
+    +'.logo-sub{font-size:12px;color:#888;margin-top:3px}'
+    +'.ur{text-align:right}'
+    +'.un{font-weight:800;font-size:15px}'
+    +'.up{font-size:13px;color:#666;margin-top:2px}'
+    +'.ud{font-size:11px;color:#aaa;margin-top:3px}'
+    +'.pb{background:#E3F2FD;border-radius:8px;padding:12px 16px;margin-bottom:16px}'
+    +'.pn{font-size:18px;font-weight:900}'
+    +'.pm{font-size:12px;color:#666;margin-top:3px}'
+    +'table{width:100%;border-collapse:collapse;font-size:12px}'
+    +'th{background:#1565C0;color:#fff;padding:9px 8px;text-align:left;font-weight:700;font-size:11px}'
+    +'td{padding:8px;border-bottom:1px solid #E3F2FD;vertical-align:top}'
+    +'.ft{margin-top:20px;font-size:10px;color:#bbb;text-align:center;padding-top:10px;border-top:1px solid #eee}'
+    +'@media print{'
+    +'  body{padding:10px}'
+    +'  .no-print{display:none!important}'
+    +'}'
+    +'</style>'
+    +(addPrint?'<script>window.onload=function(){setTimeout(function(){window.print();},600);}<\/script>':'')
+    +'</head><body>'
+    +'<div class="hdr">'
+    +'<div><div class="logo">🛠️ MatList Pro</div><div class="logo-sub">Materials List</div></div>'
+    +'<div class="ur">'
+    +(settings.name?'<div class="un">'+esc(settings.name)+'</div>':'')
+    +(settings.phone?'<div class="up">'+esc(settings.phone)+'</div>':'')
+    +'<div class="ud">'+d+'</div>'
+    +'</div>'
+    +'</div>'
+    +'<div class="pb">'
+    +'<div class="pn">'+esc(p.emoji||'🏠')+' '+esc(p.name)+'</div>'
+    +'<div class="pm">'+p.items.length+' items &nbsp;•&nbsp; Total qty: '+p.items.reduce(function(s,i){return s+i.qty;},0)+'</div>'
+    +'</div>'
+    +'<table>'
+    +'<thead><tr>'
+    +'<th>#</th><th>Item</th><th>Brand</th><th>Category</th>'
+    +'<th>Qty</th><th>Size</th><th>Length</th><th>Weight</th>'
+    +'<th>Status</th><th>Notes</th>'
+    +'</tr></thead>'
+    +'<tbody>'+rows+'</tbody>'
+    +'</table>'
+    +'<div class="ft">MatList Pro v3.8 &nbsp;•&nbsp; by NAFIH KC &nbsp;•&nbsp; github.com/nafih-kc</div>'
+    +'</body></html>';
+}
+
+function showFullPreview(p, addPrint, doc){
+  // Use pre-built doc if provided, otherwise build it
+  var html=doc||buildListDoc(p,addPrint);
+
+  // Remove any existing preview
+  var old=document.getElementById('mlp-preview');
+  if(old) old.remove();
+
+  var overlay=document.createElement('div');
+  overlay.id='mlp-preview';
+  overlay.style.cssText='position:fixed;inset:0;background:#fff;z-index:500;display:flex;flex-direction:column;';
+
+  var topbar=document.createElement('div');
+  topbar.style.cssText='background:#1565C0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;';
+  topbar.innerHTML=
+    '<span style="color:#fff;font-weight:900;font-size:14px">📄 '+(addPrint?'PDF Preview':'HTML Preview')+'</span>'
+    +'<div style="display:flex;gap:8px">'
+    +(addPrint?'<button id="printBtn" style="background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:8px;padding:8px 14px;font-weight:800;font-size:12px;cursor:pointer;font-family:sans-serif">🖨️ Print</button>':'')
+    +'<button id="closeBtn" style="background:#FFEBEE;border:none;color:#C62828;border-radius:8px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer;font-family:sans-serif">✕ Close</button>'
+    +'</div>';
+
+  var infobar=document.createElement('div');
+  infobar.style.cssText='background:#E3F2FD;padding:8px 16px;font-size:12px;color:#1565C0;font-weight:700;text-align:center;flex-shrink:0;';
+  infobar.textContent=addPrint
+    ?'📸 Screenshot to save  •  🖨️ Tap Print → Save as PDF'
+    :'📸 Screenshot this page to save';
+
+  var iframe=document.createElement('iframe');
+  iframe.style.cssText='flex:1;border:none;width:100%;background:#fff;';
+  iframe.setAttribute('srcdoc',html);
+
+  overlay.appendChild(topbar);
+  overlay.appendChild(infobar);
+  overlay.appendChild(iframe);
+  document.body.appendChild(overlay);
+
+  document.getElementById('closeBtn').onclick=function(){
+    var el=document.getElementById('mlp-preview');
+    if(el)el.remove();
+  };
+  if(addPrint){
+    document.getElementById('printBtn').onclick=function(){
+      try{iframe.contentWindow.print();}catch(e){window.print();}
+    };
+  }
+}
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyExportText(){
+  var el=document.getElementById('exportTxt');
+  if(!el) return;
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(el.value).then(function(){toast('📋 Copied!');}).catch(function(){fallbackCopy(el);});
+    } else {
+      fallbackCopy(el);
+    }
+  }catch(e){fallbackCopy(el);}
+}
+
+function fallbackCopy(el){
+  try{
+    el.select();
+    el.setSelectionRange(0,99999);
+    document.execCommand('copy');
+    toast('📋 Copied!');
+  }catch(e){
+    toast('⚠️ Long press text → Select All → Copy');
+  }
+}
+
+// ════════════════════════════════════════
+// BACKUP & RESTORE
+// ════════════════════════════════════════
+function backupData(){
+  var data={
+    version:'3.7',
+    date:new Date().toISOString(),
+    projects:projects,
+    settings:settings,
+    customProds:customProds,
+    freqItems:freqItems
+  };
+  var json=JSON.stringify(data,null,2);
+  var date=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}).replace(/ /g,'-');
+  var filename='MatListPro_Backup_'+date+'.json';
+
+  // Method 1 — Blob download (Chrome)
+  try{
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast('📤 Backup saved! Store it safely.');
+    return;
+  }catch(e){}
+
+  // Method 2 — Show JSON text for manual copy (APK fallback)
+  showSheet(
+    '<div class="sheet-handle"></div>'+
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'+
+      '<div class="sheet-title" style="margin:0">📤 Backup Data</div>'+
+      '<button class="btn btn-blue btn-sm" onclick="copyBackupText()">📋 Copy</button>'+
+    '</div>'+
+    '<div style="font-size:12px;color:var(--muted);margin-bottom:10px">Tap Copy → paste in WhatsApp Saved Messages or Notes to save your backup.</div>'+
+    '<textarea id="backupTxt" readonly style="width:100%;height:260px;border:1.5px solid #D4DCF0;border-radius:10px;padding:12px;font-family:monospace;font-size:10px;color:#0D1B3E;background:#F4F7FF;resize:none;line-height:1.5"></textarea>'+
+    '<button class="btn btn-outline btn-lg" onclick="closeSheet()" style="margin-top:10px">Close</button>'
+  );
+  setTimeout(function(){
+    var el=document.getElementById('backupTxt');
+    if(el) el.value=json;
+  },60);
+}
+
+function copyBackupText(){
+  var el=document.getElementById('backupTxt');
+  if(!el) return;
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(el.value).then(function(){toast('📋 Backup copied! Paste it somewhere safe.');}).catch(function(){fbCopy(el);});
+    } else { fbCopy(el); }
+  }catch(e){ fbCopy(el); }
+}
+
+function fbCopy(el){
+  try{el.select();el.setSelectionRange(0,99999);document.execCommand('copy');toast('📋 Backup copied!');}
+  catch(e){toast('⚠️ Select all text and copy manually');}
+}
+
+function restoreData(input){
+  var file=input.files[0];
+  if(!file){return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(!data.projects||!Array.isArray(data.projects)){
+        toast('⚠️ Invalid backup file');return;
+      }
+      showSheet(
+        '<div class="sheet-handle"></div>'+
+        '<div class="sheet-title">📥 Restore Backup?</div>'+
+        '<div style="font-size:14px;color:var(--text2);margin-bottom:8px">Found <b>'+data.projects.length+' projects</b> from <b>'+(data.date?new Date(data.date).toLocaleDateString('en-IN'):'unknown date')+'</b>.</div>'+
+        '<div style="font-size:13px;color:var(--red);margin-bottom:18px;background:var(--red-light);border-radius:10px;padding:10px 14px;">⚠️ This will replace your current data. Make sure you have a backup of current data first.</div>'+
+        '<div style="display:flex;gap:9px">'+
+          '<button class="btn btn-blue btn-lg" onclick="confirmRestore()" style="font-size:14px">✅ Yes, Restore</button>'+
+          '<button class="btn btn-outline btn-md" onclick="closeSheet()" style="flex-shrink:0;width:auto">Cancel</button>'+
+        '</div>'
+      );
+      window._pendingRestore=data;
+    }catch(ex){
+      toast('⚠️ Could not read backup file');
+    }
+  };
+  reader.readAsText(file);
+  // Reset input so same file can be picked again
+  input.value='';
+}
+
+function confirmRestore(){
+  var data=window._pendingRestore;
+  if(!data){closeSheet();return;}
+  projects=data.projects||[];
+  settings=data.settings||{name:'',phone:''};
+  customProds=data.customProds||{};
+  freqItems=data.freqItems||{};
+  saveAll();
+  closeSheet();
+  A.tab='home';A.openProjId=null;
+  render();
+  toast('✅ Restored '+projects.length+' projects!');
+  window._pendingRestore=null;
+}
+
+// ════════════════════════════════════════
+// SHEET / MODAL
+// ════════════════════════════════════════
+function showSheet(html){
+  document.getElementById('sheet').innerHTML=html;
+  document.getElementById('overlay').style.display='flex';
+}
+function closeSheet(){document.getElementById('overlay').style.display='none';}
+
+// ════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════
+let _toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';
+  clearTimeout(_toastTimer);_toastTimer=setTimeout(()=>t.style.display='none',2600);
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+loadAll();render();
+</script>
+<script>if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+</body>
+</html>
